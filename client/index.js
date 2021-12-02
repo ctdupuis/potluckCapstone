@@ -150,7 +150,7 @@ function rotTween(to) {
 
 
 
-const baseURL = `https://potluck-capstone-daravy.herokuapp.com/guests`
+const baseURL = `http://localhost:4000/guests`
 
 
 const form = document.querySelector('#rsvp')
@@ -178,8 +178,9 @@ function handleSubmit(e) {
     }
     console.log(body)
 
-    axios.post('https://potluck-capstone-daravy.herokuapp.com/guests', body)
-        .then(() => {
+    axios.post('http://localhost:4000/guests', body)
+        .then((res) => {
+            renderGuest(res.data)
             firstNameInput.value = ''
             lastNameInput.value = ''
             phoneInput.value = ''
@@ -195,7 +196,7 @@ function handleSubmit(e) {
 
 
 function getGuests() {
-    axios.get('https://potluck-capstone-daravy.herokuapp.com/guests')//http://localhost:4000/guests
+    axios.get('http://localhost:4000/guests')//http://localhost:4000/guests
         .then(res => {
             console.log(res.data)
             const guest = res.data
@@ -217,7 +218,7 @@ function getGuests() {
 function getGuests() {
     guestList.innerHTML = ''
 
-    axios.get('https://potluck-capstone-daravy.herokuapp.com/guests/')
+    axios.get('http://localhost:4000/guests/')
         .then(res => {
             res.data.forEach(elem => {
                 let guestCard = `<div class="guest-card">
@@ -236,12 +237,23 @@ function getGuests() {
 
 function deleteCard(id) {
     console.log('this is delete card')
-    axios.delete(`https://potluck-capstone-daravy.herokuapp.com/guests/${id}`)
+    axios.delete(`http://localhost:4000/guests/${id}`)
         .then(() => getGuests())
         .catch(err => console.log(err))
 }
 
+renderGuest = data => {
+    const guest = data[0];
+    let guestCard = 
+    `<div class="guest-card">
+        <h2>${guest.firstname} ${guest.lastname}</h2>
+        <h3> ${guest.dishselected}</h3>
+        <button onclick="deleteCard(${guest['guest_id']})">Delete</button>
+    </div>
+    `
 
+    guestList.innerHTML += guestCard
+}
 
 
 function addToList() {
